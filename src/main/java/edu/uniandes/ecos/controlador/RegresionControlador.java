@@ -5,8 +5,11 @@
  */
 package edu.uniandes.ecos.controlador;
 
+import edu.uniandes.ecos.mundo.Calculo;
+import edu.uniandes.ecos.mundo.Regresion;
 import edu.uniandes.ecos.presentacion.PaintingWeb;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -36,25 +39,38 @@ public class RegresionControlador extends HttpServlet {
             Logger.getLogger(RegresionControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     @Override
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        PaintingWeb.presentarOpcion(req, resp);        
-        
+        PaintingWeb.presentarOpcion(req, resp);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String cantidadXY = req.getParameter("cantidad");
-        PaintingWeb.showCeldas(req, resp, Integer.parseInt(cantidadXY));
-        
-//        try {              
-//            LinkedList<DatoEnlazado> datosCapturados = new LinkedList<DatoEnlazado>();
-//            
-//            PaintingWeb.showResults(req, resp);
-//        } catch (Exception ex) {
-//            Logger.getLogger(RegresionControlador.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        LinkedList<Regresion> datosCapturados = new LinkedList<Regresion>();
+        Regresion datoEnlazado = null;
+        String accionCalcular = req.getParameter("calcular");
+        String cantidadXY = req.getParameter("cantxy");
+        int cantidadCamposIngresados = Integer.parseInt(cantidadXY);
+        if (accionCalcular != null) {
+            for (int i = 0; i < cantidadCamposIngresados; i++) {
+                datoEnlazado = new Regresion(Double.valueOf(req.getParameter("valX" + i)), Double.valueOf(req.getParameter("valY" + i)));
+                datosCapturados.add(datoEnlazado);
+            }
+            Calculo calculo = new Calculo();
+            calculo.calcularMedia(datosCapturados);
+            calculo.calcularSumatoria(datosCapturados);
+            calculo.calcularBetaUno(calculo.getDatoEnlazado());
+            calculo.calcularBetaCero(calculo.getDatoEnlazado());
+            calculo.calcularCoeficiente(calculo.getDatoEnlazado());
+            calculo.calcularCoeficienteCuadrado(calculo.getDatoEnlazado());
+            calculo.calcularEstimacionMejorada(calculo.getDatoEnlazado(), 386);
+            
+            PaintingWeb.showCalculo(req, resp, calculo.getDatoEnlazado());
+        } else {
+            PaintingWeb.showCeldas(req, resp, Integer.parseInt(cantidadXY));
+        }
     }
 }

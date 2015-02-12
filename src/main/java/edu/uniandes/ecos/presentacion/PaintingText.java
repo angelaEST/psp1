@@ -5,7 +5,7 @@
  */
 package edu.uniandes.ecos.presentacion;
 
-import edu.uniandes.ecos.mundo.DatoEnlazado;
+import edu.uniandes.ecos.mundo.Regresion;
 
 /**
  *
@@ -13,21 +13,16 @@ import edu.uniandes.ecos.mundo.DatoEnlazado;
  */
 public class PaintingText {
 
-    public void pintarBoB1(DatoEnlazado datoEnlazado) {
-        Double b1 = ((datoEnlazado.getXy()) - ((datoEnlazado.getCantidadDatosEnlazados()) * (datoEnlazado.getMediaX() * (datoEnlazado.getMediaY()))))
-                / ((datoEnlazado.getX2()) - (datoEnlazado.getCantidadDatosEnlazados() * (Math.pow(datoEnlazado.getMediaX(), 2))));
-
-        System.out.println("\n ******** El resultado de Beta 1 es:  " + b1 + "  ********");
-        
-        Double b0 = (datoEnlazado.getMediaY()) - ((b1) * datoEnlazado.getMediaX());
-        
-        System.out.println("\n ******** Promedio de y:  " + datoEnlazado.getMediaY() +"  ********");
-        System.out.println("\n ******** El resultado de Beta 0 es:  " + b0 +"  ********");
-        
-        Double coeficiente =(((datoEnlazado.getCantidadDatosEnlazados())*(datoEnlazado.getXy())) - ((datoEnlazado.getSumatoriaX())*(datoEnlazado.getSumatoriaY())))/
-                (Math.sqrt(((((datoEnlazado.getCantidadDatosEnlazados())*(datoEnlazado.getX2()))-(Math.pow(datoEnlazado.getSumatoriaX(), 2))))*((((datoEnlazado.getCantidadDatosEnlazados())*(datoEnlazado.getY2()))-(Math.pow(datoEnlazado.getSumatoriaY(), 2))))));
-         System.out.println("\n ******** El coeficiente de correlación es:  " + coeficiente + "  ********");
-         System.out.println("\n ******** El coeficiente de correlación al cuadrado es:  " + Math.pow(coeficiente, 2) + "  ********");
-         
+    /**
+     * Presenta resultados por consola
+     * @param datoEnlazado 
+     */
+    public void pintarResultados(Regresion datoEnlazado) {
+        System.out.println("\n ******** El resultado de Beta 1 es:  " + datoEnlazado.getBeta1() + "  ********");
+        System.out.println("\n ******** Promedio de y:  " + datoEnlazado.getMediaY() + "  ********");
+        System.out.println("\n ******** El resultado de Beta 0 es:  " + datoEnlazado.getBeta0() + "  ********");
+        System.out.println("\n ******** El coeficiente de correlación es:  " + datoEnlazado.getCoeficiente() + "  ********");
+        System.out.println("\n ******** El coeficiente de correlación al cuadrado es:  " + datoEnlazado.getCoeficienteCuadrado() + "  ********");
+        System.out.println("\n ******** Estimacion mejorada:  " + datoEnlazado.getYk() + "  ********");
     }
 }
